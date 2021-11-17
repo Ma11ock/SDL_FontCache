@@ -281,6 +281,22 @@ FC_GlyphData FC_MakeGlyphData(int cache_level, Sint16 x, Sint16 y, Uint16 w, Uin
 // Enough to hold all of the ascii characters and some.
 #define FC_DEFAULT_NUM_BUCKETS 300
 
+typedef struct FC_MapNode
+{
+    Uint32 key;
+    FC_GlyphData value;
+    struct FC_MapNode* next;
+
+} FC_MapNode;
+
+typedef struct FC_Map
+{
+    int num_buckets;
+    FC_MapNode** buckets;
+} FC_Map;
+
+
+
 static FC_Map* FC_MapCreate(int num_buckets)
 {
     int i;
@@ -402,8 +418,47 @@ static FC_GlyphData* FC_MapFind(FC_Map* map, Uint32 codepoint)
 }
 
 
+
+struct FC_Font
+{
+    #ifndef FC_USE_SDL_GPU
+    SDL_Renderer* renderer;
+    #endif
+
+    TTF_Font* ttf_source;  // TTF_Font source of characters
+    Uint8 owns_ttf_source;  // Can we delete the TTF_Font ourselves?
+
+    FC_FilterEnum filter;
+
+    SDL_Color default_color;
+    Uint16 height;
+
+    Uint16 maxWidth;
+    Uint16 baseline;
+    int ascent;
+    int descent;
+
+    int lineSpacing;
+    int letterSpacing;
+
+    // Uses 32-bit (4-byte) Unicode codepoints to refer to each glyph
+    // Codepoints are little endian (reversed from UTF-8) so that something like 0x00000005 is ASCII 5 and the map can be indexed by ASCII values
+    FC_Map* glyphs;
+
+    FC_GlyphData last_glyph;  // Texture packing cursor
+    int glyph_cache_size;
+    int glyph_cache_count;
+    FC_Image** glyph_cache;
+
+    char* loading_string;
+
+};
+
 // Private
 static FC_GlyphData* FC_PackGlyphData(FC_Font* font, Uint32 codepoint, Uint16 width, Uint16 maxWidth, Uint16 maxHeight);
+
+
+
 
 static_inline SDL_Surface* FC_CreateSurface32(Uint32 width, Uint32 height)
 {
