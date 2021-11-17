@@ -25,6 +25,9 @@ target_link_libraries(FontCache PUBLIC ${SDL2_LIBRARY})
 target_link_libraries(FontCache PUBLIC ${SDL2_TTF_LIBRARIES})
 target_include_directories(FontCache PUBLIC ${SDL2_INCLUDE_DIR})
 target_include_directories(FontCache PUBLIC ${SDL2_TTF_INCLUDE_DIRS})
-target_link_directories(FontCache PUBLIC ${SDL2_TTF_INCLUDE_DIRS})
-
 target_include_directories(FontCache PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(FontCache PUBLIC ${SDL_GPU_LINKED_LIB})
+target_include_directories(FontCache PUBLIC ${SDL2_GPU_INCLUDE_DIR})
+
+target_compile_definitions(FontCache PUBLIC FC_USE_SDL_GPU)
