@@ -97,13 +97,6 @@ typedef struct FC_Effect
 
 } FC_Effect;
 
-typedef struct FC_GlyphData
-{
-    SDL_Rect rect;
-    int cache_level;
-
-} FC_GlyphData;
-
 typedef struct FC_MapNode
 {
     Uint32 key;
@@ -152,6 +145,15 @@ typedef struct FC_Font
     char* loading_string;
 
 } FC_Font;
+
+typedef struct FC_GlyphData
+{
+    SDL_Rect rect;
+    int cache_level;
+
+} FC_GlyphData;
+
+
 
 
 // Object creation
